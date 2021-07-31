@@ -1,29 +1,42 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./WeatherBox.css";
 import { Card, Button, InputGroup, FormControl } from "react-bootstrap";
 import { api } from "./../../api";
+import Loading from "../Loading/Loading";
 
 export default function WeatherBox() {
   const searchField = useRef(null);
   const [weather, setWeather] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const getWeatherFromSearch = (e) => {
     let place = searchField.current.value;
-    if (place) {
-      fetch(`${api.base}?q=${place}&units=metric&lang=he&appid=${api.key}`)
-        .then((result) => result.json())
-        .then((resObj) => {
-          if (resObj.cod == "404") return alert("נתונים לא נמצאו");
-          setWeather({
-            temp: resObj.main.temp,
-            feelsLike: resObj.main.feels_like,
-            description: resObj.weather[0].description,
+    setIsLoading(true);
+
+    setTimeout(() => {
+      if (place) {
+        fetch(`${api.base}?q=${place}&units=metric&lang=he&appid=${api.key}`)
+          .then((result) => result.json())
+          .then((resObj) => {
+            setIsLoading(false);
+
+            if (resObj.cod == "404") {
+              setWeather({});
+              return alert("נתונים לא נמצאו");
+            }
+
+            setWeather({
+              temp: resObj.main.temp,
+              feelsLike: resObj.main.feels_like,
+              description: resObj.weather[0].description,
+            });
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            if (err.cod) alert("נתונים לא נמצאו");
           });
-        })
-        .catch((err) => {
-          if (err.cod) alert("נתונים לא נמצאו");
-        });
-    }
+      }
+    }, 2000);
   };
 
   const loadWeatherResult = () => {
@@ -61,8 +74,18 @@ export default function WeatherBox() {
             ref={searchField}
           />
         </InputGroup>
-        {loadWeatherResult()}
-        <Button variant="primary" onClick={getWeatherFromSearch}>
+        {isLoading ? (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Loading />
+          </div>
+        ) : (
+          loadWeatherResult()
+        )}
+        <Button
+          variant="primary"
+          onClick={getWeatherFromSearch}
+          disabled={isLoading}
+        >
           בדוק
         </Button>
       </Card.Body>

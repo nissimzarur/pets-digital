@@ -5,7 +5,7 @@ import "./NavbarMenu.css";
 
 export default function NavbarMenu(props) {
   console.log(props);
-  let h = useHistory();
+  let history = useHistory();
   return (
     <Navbar className="nav-main" expand="lg">
       <Container>
@@ -13,9 +13,11 @@ export default function NavbarMenu(props) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto nav-rtl">
-            <Nav.Link onClick={() => h.push("/")}>ראשי</Nav.Link>
+            <Nav.Link onClick={() => history.push("/")}>ראשי</Nav.Link>
             <Nav.Link href="#orders">הזמנות</Nav.Link>
-            <Nav.Link href="#products">מוצרים</Nav.Link>
+            <Nav.Link onClick={() => history.push("/products")}>
+              מוצרים
+            </Nav.Link>
 
             <Nav.Link href="#checkout">סל קניות</Nav.Link>
             <Nav.Link href="#checkout" className="nav-orders">

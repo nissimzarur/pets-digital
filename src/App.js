@@ -2,6 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import NavbarMenu from "./components/NavbarMenu/NavbarMenu";
 import Homepage from "./views/Homepage/Homepage";
+import Products from "./views/Products/Products";
+
 import {
   Route,
   BrowserRouter as Router,
@@ -14,6 +16,7 @@ function App() {
     <Router>
       <NavbarMenu />
       <Switch>
+        <Route path="/products" component={Products} />
         <Route path="/" component={Homepage} />
       </Switch>
     </Router>
