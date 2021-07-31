@@ -1,0 +1,11 @@
+.top-content {
+  text-align: center;
+  direction: rtl;
+  margin: 80px;
+  font-weight: bold;
+}
+
+.weather-container {
+  display: flex;
+  justify-content: center;
+}
