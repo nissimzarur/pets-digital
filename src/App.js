@@ -1,3 +1,5 @@
+import { Provider } from "react-redux";
+import { createStore, combineReducers } from "redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import NavbarMenu from "./components/NavbarMenu/NavbarMenu";
@@ -11,15 +13,25 @@ import {
   useHistory,
 } from "react-router-dom";
 
+import OrderReducer from "./redux/Order/reducer";
+
+const rootReducer = combineReducers({
+  OrderReducer,
+});
+
+const store = createStore(rootReducer);
+
 function App() {
   return (
-    <Router>
-      <NavbarMenu />
-      <Switch>
-        <Route path="/products" component={Products} />
-        <Route path="/" component={Homepage} />
-      </Switch>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <NavbarMenu />
+        <Switch>
+          <Route path="/products" component={Products} />
+          <Route path="/" component={Homepage} />
+        </Switch>
+      </Router>
+    </Provider>
   );
 }
 

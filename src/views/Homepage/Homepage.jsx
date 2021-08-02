@@ -1,6 +1,5 @@
 import React from "react";
 import "./Homepage.css";
-import { Image } from "react-bootstrap";
 import WeatherBox from "../../components/WeatherBox.jsx/WeatherBox";
 
 export default function Homepage(props) {

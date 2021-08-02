@@ -1,23 +1,34 @@
 import React, { useState, useEffect } from "react";
+import {
+  addProductToOrder,
+  removeProductFromOrder,
+} from "./../../redux/Order/actions";
+
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
 import Loading from "../../components/Loading/Loading";
 import ProductCard from "./../../components/ProductCard/ProductCard";
 import "./Products.css";
 
-export default function Products() {
+function Products({ addProductToOrder, removeProductFromOrder }) {
   const [isLoading, setIsLoading] = useState(true);
   const [pageProducts, setPageProducts] = useState([]);
 
-  const loadProducts = () => {
-    return pageProducts;
-  };
-
   useEffect(() => {
     let tempProducts = [];
-    fetch("http://192.168.1.211:3002/products")
+    fetch("http://192.168.1.22:3002/products")
       .then((results) => results.json())
       .then((products) => {
-        products.data.forEach((product) => {
-          tempProducts.push(<ProductCard product={product} />);
+        products.data.forEach((product, key) => {
+          tempProducts.push(
+            <ProductCard
+              product={product}
+              key={key}
+              addProductToOrderHandler={addProductToOrder}
+              removeProductFromOrderHandler={removeProductFromOrder}
+            />
+          );
         });
         setIsLoading(false);
         setPageProducts(
@@ -53,3 +64,20 @@ export default function Products() {
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+  const { order } = state.OrderReducer.orderReducer;
+
+  return { order };
+};
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      addProductToOrder,
+      removeProductFromOrder,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

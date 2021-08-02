@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom";
 import "./NavbarMenu.css";
 
 export default function NavbarMenu(props) {
-  console.log(props);
   let history = useHistory();
   return (
     <Navbar className="nav-main" expand="lg">
@@ -14,7 +13,6 @@ export default function NavbarMenu(props) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto nav-rtl">
             <Nav.Link onClick={() => history.push("/")}>ראשי</Nav.Link>
-            <Nav.Link href="#orders">הזמנות</Nav.Link>
             <Nav.Link onClick={() => history.push("/products")}>
               מוצרים
             </Nav.Link>
