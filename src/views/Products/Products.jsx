@@ -17,7 +17,7 @@ function Products({ addProductToOrder, removeProductFromOrder }) {
 
   useEffect(() => {
     let tempProducts = [];
-    fetch("http://192.168.1.22:3002/products")
+    fetch("http://192.168.56.1:3002/products")
       .then((results) => results.json())
       .then((products) => {
         products.data.forEach((product, key) => {

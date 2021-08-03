@@ -1,0 +1,42 @@
+.cart-table {
+  margin: 5%;
+}
+
+.cart-title {
+  text-align: center;
+  direction: rtl;
+  font-weight: bold;
+  font-size: x-large;
+  margin-bottom: 10px;
+}
+
+th {
+  text-align: right;
+  direction: rtl;
+}
+
+tr {
+  text-align: right;
+  direction: rtl;
+}
+
+.no-products-title {
+  text-align: center;
+  direction: rtl;
+  font-weight: bold;
+  color: brown;
+}
+
+.total-price-row {
+  background-color: darkseagreen;
+  font-weight: bold;
+}
+
+.order-btn-container {
+  display: flex;
+  justify-content: center;
+}
+
+.order-btn {
+  width: 150px;
+}

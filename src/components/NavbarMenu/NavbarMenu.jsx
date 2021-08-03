@@ -1,10 +1,19 @@
 import React from "react";
-import { Navbar, Container, Nav } from "react-bootstrap";
+import { Navbar, Container, Nav, Badge } from "react-bootstrap";
+import { connect } from "react-redux";
+
 import { useHistory } from "react-router-dom";
 import "./NavbarMenu.css";
 
-export default function NavbarMenu(props) {
+function NavbarMenu({ order }) {
   let history = useHistory();
+
+  console.log(order);
+  let numOfProducts = 0;
+  if (order) {
+    numOfProducts = order.length;
+  }
+
   return (
     <Navbar className="nav-main" expand="lg">
       <Container>
@@ -17,7 +26,9 @@ export default function NavbarMenu(props) {
               מוצרים
             </Nav.Link>
 
-            <Nav.Link href="#checkout">סל קניות</Nav.Link>
+            <Nav.Link onClick={() => history.push("/cart")}>
+              סל קניות <Badge bg="secondary">{numOfProducts}</Badge>
+            </Nav.Link>
             <Nav.Link href="#checkout" className="nav-orders">
               הזמנות
             </Nav.Link>
@@ -27,3 +38,11 @@ export default function NavbarMenu(props) {
     </Navbar>
   );
 }
+
+const mapStateToProps = (state) => {
+  const { orderReducer } = state.OrderReducer;
+  const order = orderReducer;
+  return { order };
+};
+
+export default connect(mapStateToProps)(NavbarMenu);
