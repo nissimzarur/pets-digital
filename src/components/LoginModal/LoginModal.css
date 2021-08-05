@@ -1,0 +1,10 @@
+.modal-title {
+  display: flex;
+  justify-content: center;
+  direction: rtl;
+}
+
+.modal-btns {
+  display: flex;
+  justify-content: center;
+}
