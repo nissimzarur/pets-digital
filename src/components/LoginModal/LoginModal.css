@@ -4,7 +4,19 @@
   direction: rtl;
 }
 
-.modal-btns {
+.modal-buttons{
+   display: flex;
+   justify-content: center;
+}
+
+.modal-inputs {
+  direction: ltr;
   display: flex;
   justify-content: center;
+}
+
+.modal-input{
+   direction: ltr;
+   text-align: left;
+   margin: 5px;
 }

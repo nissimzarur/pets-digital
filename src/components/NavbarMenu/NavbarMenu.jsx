@@ -27,7 +27,7 @@ function NavbarMenu({ order }) {
       <LoginModal showModal={showModal} showModalHandler={showModalHandler} />
       <Navbar className="nav-main" expand="lg">
         <Container>
-          <Navbar.Brand href="#home">Pets-Digital</Navbar.Brand>
+          <Navbar.Brand className="brand-logo" onClick={() => history.push("/")}>Pets-Digital</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto nav-rtl">

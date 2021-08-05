@@ -11,3 +11,7 @@
 #basic-navbar-nav {
   text-align: center;
 }
+
+.brand-logo{
+	cursor: pointer;
+}

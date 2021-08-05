@@ -16,33 +16,78 @@ function Products({ addProductToOrder, removeProductFromOrder }) {
   const [pageProducts, setPageProducts] = useState([]);
 
   useEffect(() => {
-    let tempProducts = [];
-    fetch("http://192.168.56.1:3002/products")
-      .then((results) => results.json())
-      .then((products) => {
-        products.data.forEach((product, key) => {
-          tempProducts.push(
-            <ProductCard
-              product={product}
-              key={key}
-              addProductToOrderHandler={addProductToOrder}
-              removeProductFromOrderHandler={removeProductFromOrder}
-            />
-          );
-        });
-        setIsLoading(false);
-        setPageProducts(
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              flexFlow: "wrap",
-            }}
-          >
-            {tempProducts}
-          </div>
-        );
-      });
+	let tempProducts = [];
+
+	/** START POINT - ONLY FOR TESTING */
+	let products = {};
+	products.data = [
+		{
+			_id:"610b7837221ce6bd460ba4d0",
+			title:"אמבטיה לכלב",
+			description:"הדרך הקלה ביותר לרחוץ את חיית המחמד שלכם.",
+			price:115,
+			img_url:"https://www.petpro.co.il/wp-content/uploads/2018/12/15STE009_1.jpg"
+		},
+		{
+			_id:"610548f79c13b2dc1c19c2ba",
+			title:"צעצוע בד בצורת עצם",
+			description:"עצמות הבד שלנו נעשים אחד אחד בעבודת יד עם תפרים משולשים המבטיחים עמידות לאורך זמן.",
+			price:30,
+			img_url:"https://www.petpro.co.il/wp-content/uploads/2020/12/Toy-Bone_Dog_s-Life_Light-Blue_1.jpg"
+		},
+	];
+
+	products.data.forEach((product, key) => {
+		tempProducts.push(
+		  <ProductCard
+			product={product}
+			key={key}
+			addProductToOrderHandler={addProductToOrder}
+			removeProductFromOrderHandler={removeProductFromOrder}
+		  />
+		);
+	  });
+
+	  setIsLoading(false);
+	  setPageProducts(
+		<div
+		  style={{
+			display: "flex",
+			justifyContent: "center",
+			flexFlow: "wrap",
+		  }}
+		>
+		  {tempProducts}
+		</div>
+	  );
+	  /** END POINT - ONLY FOR TESTING */
+	  
+    // fetch("http://192.168.56.1:3002/products")
+    //   .then((results) => results.json())
+    //   .then((products) => {
+    //     products.data.forEach((product, key) => {
+    //       tempProducts.push(
+    //         <ProductCard
+    //           product={product}
+    //           key={key}
+    //           addProductToOrderHandler={addProductToOrder}
+    //           removeProductFromOrderHandler={removeProductFromOrder}
+    //         />
+    //       );
+    //     });
+    //     setIsLoading(false);
+    //     setPageProducts(
+    //       <div
+    //         style={{
+    //           display: "flex",
+    //           justifyContent: "center",
+    //           flexFlow: "wrap",
+    //         }}
+    //       >
+    //         {tempProducts}
+    //       </div>
+    //     );
+    //   });
   }, []);
 
   return (
