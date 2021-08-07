@@ -4,6 +4,8 @@ const mongoose = require("./connection");
 
 //Import Routes
 var Products = require("./Routes/Products");
+var Orders = require("./Routes/Orders");
+var Users = require("./Routes/Users");
 
 const app = express();
 app.use(cors());
@@ -17,6 +19,8 @@ app.listen(PORT, () => {
 
 // Use Routes
 app.use("/products", Products);
+app.use("/orders", Orders);
+app.use("/users", Users);
 
 //Default 404 page not found
 app.get("/", function (req, res) {

@@ -26,6 +26,7 @@ export default function Homepage(props) {
       <img
         src="/assets/images/header.jpg"
         style={{ backgroundSize: "cover", width: "100%" }}
+        alt="homepage-img"
       />
     </div>
   );

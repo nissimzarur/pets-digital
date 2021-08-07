@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import "./WeatherBox.css";
 import { Card, Button, InputGroup, FormControl } from "react-bootstrap";
 import { api } from "./../../api";
@@ -20,7 +20,7 @@ export default function WeatherBox() {
           .then((resObj) => {
             setIsLoading(false);
 
-            if (resObj.cod == "404") {
+            if (resObj.cod === 404) {
               setWeather({});
               return alert("נתונים לא נמצאו");
             }

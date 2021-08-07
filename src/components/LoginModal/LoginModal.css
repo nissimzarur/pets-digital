@@ -4,9 +4,9 @@
   direction: rtl;
 }
 
-.modal-buttons{
-   display: flex;
-   justify-content: center;
+.modal-buttons {
+  display: flex;
+  justify-content: center;
 }
 
 .modal-inputs {
@@ -15,8 +15,13 @@
   justify-content: center;
 }
 
-.modal-input{
-   direction: ltr;
-   text-align: left;
-   margin: 5px;
+.modal-input {
+  direction: ltr;
+  text-align: left;
+  margin: 5px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
 }
