@@ -17,6 +17,7 @@ export default function OrderDetailsModal({
   editMode,
   showModal,
   showModalHandler,
+  callback,
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,6 +28,18 @@ export default function OrderDetailsModal({
   const price = useRef(null);
   const shipmentType = useRef(null);
 
+  const orderStatusTable = {
+    1: "טרם נשלח",
+    2: "נשלח",
+    3: "מבוטל",
+  };
+
+  const shipmentTypeTable = {
+    1: "משלוח רגיל",
+    2: "משלוח מהיר",
+    3: "משלוח Express",
+  };
+
   console.log(order);
   const updateClickHandler = () => {
     setIsLoading(true);
@@ -35,9 +48,11 @@ export default function OrderDetailsModal({
       client_name: clientName.current.value,
       phone: phone.current.value,
       shipment_address: shipmentAddress.current.value,
-      status: orderStatus.current.value,
+      status: !isNaN(orderStatus.current.value) ? orderStatus.current.value : 0,
       price: price.current.value,
-      shipment_type: shipmentType.current.value,
+      shipment_type: !isNaN(shipmentType.current.value)
+        ? shipmentType.current.value
+        : 0,
     };
 
     fetch("http://192.168.56.1:3002/orders", {
@@ -46,8 +61,12 @@ export default function OrderDetailsModal({
       headers: { "Content-Type": "application/json" },
     })
       .then((result) => result.json())
-      .then(() => {
-        setIsLoading(false);
+      .then((result) => {
+        if (result.success) {
+          setIsLoading(false);
+          showModalHandler();
+          callback();
+        } else alert("חלה שגיאה בעת נסיון עדכון ההזמנה");
       })
       .catch((e) => {});
     return;
@@ -96,8 +115,13 @@ export default function OrderDetailsModal({
             aria-label="Default select example"
             className="modal-input"
             ref={orderStatus}
+            disabled={!editMode}
           >
-            <option style={{ direction: "rtl" }}>סטטוס הזמנה</option>
+            <option style={{ direction: "rtl" }}>
+              {orderStatusTable[order.status] && !editMode
+                ? orderStatusTable[order.status]
+                : "סטטוס הזמנה"}
+            </option>
             <option value="1" style={{ direction: "rtl" }}>
               טרם נשלח
             </option>
@@ -112,8 +136,13 @@ export default function OrderDetailsModal({
             aria-label="Default select example"
             className="modal-input"
             ref={shipmentType}
+            disabled={!editMode}
           >
-            <option style={{ direction: "rtl" }}>סוג משלוח</option>
+            <option style={{ direction: "rtl" }}>
+              {shipmentTypeTable[order.shipment_type] && !editMode
+                ? shipmentTypeTable[order.shipment_type]
+                : "סוג משלוח"}
+            </option>
             <option value="1" style={{ direction: "rtl" }}>
               משלוח רגיל
             </option>

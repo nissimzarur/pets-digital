@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table, Image } from "react-bootstrap";
-import "./Orders";
+import "./Orders.css";
 
 import OrderDetailsModal from "./../../components/OrderDetailsModal/OrderDetailsModal";
 
@@ -13,26 +13,36 @@ export default function Orders() {
   const showModalHandler = () => {
     setShowModal(!showModal);
   };
-  const orderStatus = {
-    0: "טרם נשלח",
-    1: "נשלח",
-    2: "מבוטל",
-  };
 
-  const shipmentType = {
-    1: "משלוח רגיל",
-    2: "משלוח מהיר",
-    3: "משלוח Express",
+  const orderStatus = {
+    1: "טרם נשלח",
+    2: "נשלח",
+    3: "מבוטל",
   };
 
   const handleRowClick = (order, mode) => {
-    console.log({ mode: mode });
     setCurrentOrder(order);
     setShowModal(true);
     setMode(mode);
   };
 
-  useEffect(() => {
+  const deleteOrder = (order) => {
+    let orderId = order._id;
+    fetch("http://192.168.56.1:3002/orders", {
+      method: "DELETE",
+      body: JSON.stringify({ _id: orderId }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((result) => result.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) fetchOrders();
+        else alert("חלה שגיאה בעת נסיון מחיקת ההזמנה");
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const fetchOrders = () => {
     fetch("http://192.168.56.1:3002/orders", { method: "GET" })
       .then((results) => results.json())
       .then((ordersResp) => {
@@ -56,14 +66,16 @@ export default function Orders() {
                         onClick={() => {
                           handleRowClick(order, true);
                         }}
+                        className="order-btn"
                       >
                         <Image src="./assets/images/edit.png" />
                       </Button>
                       <Button
                         variant="danger"
                         onClick={() => {
-                          handleRowClick(order, true);
+                          deleteOrder(order);
                         }}
+                        className="order-btn"
                       >
                         <Image src="./assets/images/delete.png" />
                       </Button>
@@ -85,6 +97,10 @@ export default function Orders() {
         } else return alert(ordersResp.errMsg);
       })
       .catch((e) => console.log(e));
+  };
+
+  useEffect(() => {
+    fetchOrders();
   }, []);
 
   const loadOrdersContent = () => {
@@ -115,6 +131,7 @@ export default function Orders() {
           showModalHandler={showModalHandler}
           order={currentOrder}
           editMode={mode}
+          callback={fetchOrders}
         />,
         loadOrdersContent(),
       ]}

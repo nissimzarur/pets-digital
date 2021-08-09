@@ -15,7 +15,8 @@ Orders.post("/", function (req, res) {
     phone: order.phone,
     comments: order.comments,
     shipment_type: order.shipmentType,
-    status: 0,
+    status: 1,
+    isDeleted: 0,
   };
   const orderModal = new OrderModel();
   const orderProductsModel = new OrderProductsModel();
@@ -50,7 +51,7 @@ Orders.post("/", function (req, res) {
 });
 
 Orders.get("/", function (req, res) {
-  OrderModel.find({})
+  OrderModel.find({ isDeleted: 0 })
     .then((orders) => {
       if (!orders) return res.json({ success: true, orders: [] });
       return res.json({ success: true, orders: orders });
@@ -72,7 +73,6 @@ Orders.put("/", function (req, res) {
       updateProps[key] = prop;
     }
   }
-  console.log(updateProps);
   const orderModal = new OrderModel();
 
   orderModal.collection
@@ -82,8 +82,28 @@ Orders.put("/", function (req, res) {
       else return res.json({ success: false, errMsg: "לא בוצע עדכון להזמנה" });
     })
     .catch((e) => console.log(e));
+});
 
-  return res.send({});
+Orders.delete("/", function (req, res) {
+  let orderObj = req.body;
+  if (!orderObj._id)
+    return res.json({ success: false, errMsg: "לא התקבל מזהה הזמנה" });
+
+  const orderId = ObjectId(orderObj._id);
+  const orderModal = new OrderModel();
+  updateProps = { isDeleted: 1 };
+
+  orderModal.collection
+    .updateOne({ _id: orderId }, { $set: updateProps })
+    .then((result) => {
+      if (result.modifiedCount > 0) return res.json({ success: true });
+      else
+        return res.json({
+          success: false,
+          errMsg: "חלה שגיאה בעת נסיון מחיקת ההזמנה",
+        });
+    })
+    .catch((e) => console.log(e));
 });
 
 module.exports = Orders;

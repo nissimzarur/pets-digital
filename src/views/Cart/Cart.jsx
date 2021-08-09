@@ -3,14 +3,23 @@ import { Button, Table } from "react-bootstrap";
 import { connect } from "react-redux";
 import "./Cart.css";
 import PreOrderModal from "../../components/PreOrderModal/PreOrderModal";
+import AlertModal from "../../components/AlertModal/AlertModal";
 
 function Cart({ order, user }) {
   const [showModal, setShowModal] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertErrMsg, setAlertErrMsg] = useState("");
 
   const showModalHandler = () => {
-    if (Object.keys(user).length === 0)
-      return alert("אנא התחבר למערכת בכדי להתקדם לביצוע ההזמנה");
-    setShowModal(!showModal);
+    if (Object.keys(user).length === 0) {
+      setAlertErrMsg("אנא התחבר בכדי להמשיך לביצוע ההזמנה");
+      setShowAlertModalHandler();
+    } else setShowModal(!showModal);
+  };
+
+  const setShowAlertModalHandler = () => {
+    console.log(showAlertModal);
+    setShowAlertModal(!showAlertModal);
   };
 
   const calcOrderPrice = () => {
@@ -68,6 +77,11 @@ function Cart({ order, user }) {
       <div className="cart-table">
         {order.length > 0 ? (
           [
+            <AlertModal
+              showAlertModal={showAlertModal}
+              setShowAlertModalHandler={setShowAlertModalHandler}
+              errMsg={alertErrMsg}
+            />,
             <PreOrderModal
               showModal={showModal}
               showModalHandler={showModalHandler}
@@ -88,7 +102,7 @@ function Cart({ order, user }) {
             <div className="order-btn-container">
               <Button
                 variant="success"
-                className="order-btn"
+                className="cart-order-btn"
                 onClick={showModalHandler}
               >
                 בצע הזמנה

@@ -44,20 +44,20 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
         <Modal.Title>כניסת מנהל</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <InputGroup className="mb-3 modal-inputs">
-          <FormControl
-            aria-label="email"
-            placeholder="Enter email"
-            ref={username}
-            className="modal-input"
-            type="email"
-          />
+        <InputGroup className="mb-3">
           <FormControl
             aria-label="password"
-            placeholder="Password"
+            placeholder="סיסמה"
             ref={password}
             className="modal-input"
             type="password"
+          />
+          <FormControl
+            aria-label="email"
+            placeholder='הכנס כתובת דוא"ל'
+            ref={username}
+            className="modal-input"
+            type="email"
           />
         </InputGroup>
       </Modal.Body>

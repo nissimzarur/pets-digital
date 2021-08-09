@@ -18,7 +18,7 @@ function NavbarMenu({ order, user }) {
     history.push("/orders");
   };
 
-  console.log(order);
+  console.log({ user: user });
   let numOfProducts = 0;
   if (order) {
     numOfProducts = order.length;
@@ -42,9 +42,11 @@ function NavbarMenu({ order, user }) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto nav-rtl">
-              <Nav.Link onClick={() => history.push("/login")}>
-                <b>התחבר</b>
-              </Nav.Link>
+              {!(typeof user == "object" && Object.keys(user).length > 0) && (
+                <Nav.Link onClick={() => history.push("/login")}>
+                  <b>התחבר</b>
+                </Nav.Link>
+              )}
 
               <Nav.Link onClick={() => history.push("/homepage")}>
                 ראשי
