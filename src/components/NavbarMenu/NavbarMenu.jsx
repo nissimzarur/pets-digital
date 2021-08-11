@@ -40,11 +40,11 @@ function NavbarMenu({ order, user }) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto nav-rtl">
-              {!(typeof user == "object" && Object.keys(user).length > 0) && (
+              {/* {!(typeof user == "object" && Object.keys(user).length > 0) && (
                 <Nav.Link onClick={() => history.push("/login")}>
                   <b>התחבר</b>
                 </Nav.Link>
-              )}
+              )} */}
 
               <Nav.Link onClick={() => history.push("/homepage")}>
                 ראשי

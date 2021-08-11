@@ -35,7 +35,7 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
         showModalHandler();
         if (result.success) {
           if (result.isAdmin) {
-            history.push("/orders");
+            history.push("/orders",{isAdmin:true});
           } //push to orders.
           else {
             setAlertErrMsg("הגישה נדחתה");
@@ -55,19 +55,13 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
         setShowAlertModalHandler={setShowAlertModalHandler}
         errMsg={alertErrMsg}
       />
-      <Modal show={showModal} onHide={showModalHandler}>
+      <Modal show={showModal} onHide={showModalHandler} className="login-modal-container">
         <Modal.Header className="modal-title">
           <Modal.Title>כניסת מנהל</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <InputGroup className="mb-3">
-            <FormControl
-              aria-label="password"
-              placeholder="סיסמה"
-              ref={password}
-              className="modal-input"
-              type="password"
-            />
+        
             <FormControl
               aria-label="email"
               placeholder='הכנס כתובת דוא"ל'
@@ -75,14 +69,21 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
               className="modal-input"
               type="email"
             />
+			    <FormControl
+              aria-label="password"
+              placeholder="סיסמה"
+              ref={password}
+              className="modal-input"
+              type="password"
+            />
           </InputGroup>
         </Modal.Body>
         <Modal.Footer className="modal-buttons">
+		<Button variant="primary" onClick={loginButtonHandler}>
+            כניסה
+          </Button>
           <Button variant="secondary" onClick={showModalHandler}>
             סגור
-          </Button>
-          <Button variant="primary" onClick={loginButtonHandler}>
-            כניסה
           </Button>
         </Modal.Footer>
         <div className="loading-container">{isLoading && <Loading />}</div>

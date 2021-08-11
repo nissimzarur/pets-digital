@@ -27,12 +27,12 @@ function App() {
       <Router>
         <NavbarMenu />
         <Switch>
-          <Route path="/login" component={Login} />
+          {/* <Route path="/login" component={Login} /> */}
           <Route path="/homepage" component={Homepage} />
           <Route path="/orders" component={Orders} />
           <Route path="/cart" component={Cart} />
           <Route path="/products" component={Products} />
-          <Route path="/" component={Login} />
+          <Route path="/" component={Homepage} />
         </Switch>
       </Router>
     </Provider>

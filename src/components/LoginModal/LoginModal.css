@@ -1,3 +1,7 @@
+.login-modal-container{
+	direction: rtl;
+}
+
 .modal-title {
   display: flex;
   justify-content: center;

@@ -25,3 +25,9 @@
   width: 300px;
   margin-bottom: 2px;
 }
+
+.err-msg{
+	font-weight: bold;
+	color:red;
+	text-align: center;
+}

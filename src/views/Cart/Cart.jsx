@@ -12,10 +12,11 @@ function Cart({ order, user }) {
   const [alertErrMsg, setAlertErrMsg] = useState("");
 
   const showModalHandler = () => {
-    if (Object.keys(user).length === 0) {
-      setAlertErrMsg("אנא התחבר בכדי להמשיך לביצוע ההזמנה");
-      setShowAlertModalHandler();
-    } else setShowModal(!showModal);
+	setShowModal(!showModal);
+    // if (Object.keys(user).length === 0) {
+    //   setAlertErrMsg("אנא התחבר בכדי להמשיך לביצוע ההזמנה");
+    //   setShowAlertModalHandler();
+    // } else setShowModal(!showModal);
   };
 
   const setShowAlertModalHandler = () => {

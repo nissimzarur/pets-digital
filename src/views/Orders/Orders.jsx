@@ -6,13 +6,15 @@ import OrderDetailsModal from "./../../components/OrderDetailsModal/OrderDetails
 import AlertModal from "../../components/AlertModal/AlertModal";
 import { v4 as uuidv4 } from "uuid";
 
-export default function Orders() {
+export default function Orders({history}) {
   const [ordersContent, setOrderContent] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentOrder, setCurrentOrder] = useState({});
   const [mode, setMode] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertErrMsg, setAlertErrMsg] = useState("");
+
+  if(!history.location.state || !history.location.state.isAdmin) history.push('/');
 
   const setShowAlertModalHandler = () => {
     setShowAlertModal(!showAlertModal);
