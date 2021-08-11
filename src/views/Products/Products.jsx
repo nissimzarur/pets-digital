@@ -62,7 +62,7 @@ function Products({ addProductToOrder, removeProductFromOrder }) {
     //   );
     /** END POINT - ONLY FOR TESTING */
 
-    fetch("http://192.168.56.1:3002/products")
+    fetch(`${process.env.REACT_APP_IP_ADDRESS}/products`)
       .then((results) => results.json())
       .then((products) => {
         products.data.forEach((product, key) => {

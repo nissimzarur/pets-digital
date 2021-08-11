@@ -6,17 +6,27 @@ import { bindActionCreators } from "redux";
 import "./Login.css";
 
 import Loading from "../../components/Loading/Loading";
+import AlertModal from "../../components/AlertModal/AlertModal";
 
 function Login({ saveUserInfo, history }) {
   let username = useRef(null);
   let password = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertErrMsg, setAlertErrMsg] = useState("");
+
+  const setShowAlertModalHandler = () => {
+    setShowAlertModal(!showAlertModal);
+  };
 
   const loginHandler = () => {
-    if (!username || !password) return alert("אנא מלא את הפרטים בצורה תקינה");
-
+    if (!username || !password) {
+      setAlertErrMsg("אנא מלא את הפרטים בצורה תקינה");
+      setShowAlertModal(!showAlertModal);
+      return false;
+    }
     setIsLoading(true);
-    fetch("http://192.168.56.1:3002/users/login", {
+    fetch(`${process.env.REACT_APP_IP_ADDRESS}/users/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -27,43 +37,53 @@ function Login({ saveUserInfo, history }) {
       .then((result) => result.json())
       .then((loginResult) => {
         setIsLoading(false);
-        if (!loginResult.success || !loginResult.user)
-          return alert(loginResult.errMsg || "אימות משתמש נכשל");
+        if (!loginResult.success || !loginResult.user) {
+          setAlertErrMsg(loginResult.errMsg || "אימות משתמש נכשל");
+          setShowAlertModal(!showAlertModal);
+          return false;
+        }
         saveUserInfo(loginResult.user);
         history.push("/homepage");
       })
       .catch((e) => {
-        console.log(e);
         setIsLoading(false);
-        alert("נסיון התחברות נכשל");
+        setAlertErrMsg("נסיון התחברות נכשל");
+        setShowAlertModal(!showAlertModal);
       });
   };
   return (
-    <div className="login-container">
-      <Form className="login-form">
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Control
-            type="email"
-            placeholder='הכנס כתובת דוא"ל'
-            ref={username}
-          />
-        </Form.Group>
+    <>
+      <AlertModal
+        showAlertModal={showAlertModal}
+        setShowAlertModalHandler={setShowAlertModalHandler}
+        errMsg={alertErrMsg}
+      />
+      <div className="login-container">
+        <Form className="login-form">
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Control
+              type="email"
+              placeholder='הכנס כתובת דוא"ל'
+              ref={username}
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Control type="password" placeholder="סיסמא" ref={password} />
-        </Form.Group>
-        <div className="login-btn">
-          <Button variant="primary" onClick={loginHandler}>
-            כניסה
-          </Button>
-        </div>
-      </Form>
-      <Modal show={isLoading}>
-        <div className="modal-login">
-          <Loading />
-        </div>
-      </Modal>
-    </div>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Control type="password" placeholder="סיסמא" ref={password} />
+          </Form.Group>
+          <div className="login-btn">
+            <Button variant="primary" onClick={loginHandler}>
+              כניסה
+            </Button>
+          </div>
+        </Form>
+        <Modal show={isLoading}>
+          <div className="modal-login">
+            <Loading />
+          </div>
+        </Modal>
+      </div>
+    </>
   );
 }
 

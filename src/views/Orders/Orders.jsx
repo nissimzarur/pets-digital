@@ -3,12 +3,20 @@ import { Button, Table, Image } from "react-bootstrap";
 import "./Orders.css";
 
 import OrderDetailsModal from "./../../components/OrderDetailsModal/OrderDetailsModal";
+import AlertModal from "../../components/AlertModal/AlertModal";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Orders() {
   const [ordersContent, setOrderContent] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentOrder, setCurrentOrder] = useState({});
   const [mode, setMode] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertErrMsg, setAlertErrMsg] = useState("");
+
+  const setShowAlertModalHandler = () => {
+    setShowAlertModal(!showAlertModal);
+  };
 
   const showModalHandler = () => {
     setShowModal(!showModal);
@@ -28,22 +36,24 @@ export default function Orders() {
 
   const deleteOrder = (order) => {
     let orderId = order._id;
-    fetch("http://192.168.56.1:3002/orders", {
+    fetch(`${process.env.REACT_APP_IP_ADDRESS}/orders`, {
       method: "DELETE",
       body: JSON.stringify({ _id: orderId }),
       headers: { "Content-Type": "application/json" },
     })
       .then((result) => result.json())
       .then((result) => {
-        console.log(result);
         if (result.success) fetchOrders();
-        else alert("חלה שגיאה בעת נסיון מחיקת ההזמנה");
+        else {
+          setAlertErrMsg("חלה שגיאה בעת נסיון מחיקת ההזמנה");
+          setShowAlertModal(!showAlertModal);
+        }
       })
       .catch((e) => console.log(e));
   };
 
   const fetchOrders = () => {
-    fetch("http://192.168.56.1:3002/orders", { method: "GET" })
+    fetch(`${process.env.REACT_APP_IP_ADDRESS}/orders`, { method: "GET" })
       .then((results) => results.json())
       .then((ordersResp) => {
         if (ordersResp.success) {
@@ -53,7 +63,7 @@ export default function Orders() {
             ordersResp.orders.forEach((order) => {
               rowNum++;
               content.push(
-                <tr>
+                <tr key={uuidv4()}>
                   <td>
                     <div
                       style={{
@@ -94,7 +104,11 @@ export default function Orders() {
             });
             setOrderContent(content);
           } else return setOrderContent([]);
-        } else return alert(ordersResp.errMsg);
+        } else {
+          setAlertErrMsg(ordersResp.errMsg);
+          setShowAlertModal(!showAlertModal);
+          return false;
+        }
       })
       .catch((e) => console.log(e));
   };
@@ -107,7 +121,7 @@ export default function Orders() {
     if (!ordersContent) return <div>אין הזמנות להצגה</div>;
 
     let table = (
-      <Table striped bordered hover>
+      <Table striped bordered hover key={uuidv4()}>
         <thead>
           <tr>
             <th></th>
@@ -126,12 +140,19 @@ export default function Orders() {
   return (
     <>
       {[
+        <AlertModal
+          showAlertModal={showAlertModal}
+          setShowAlertModalHandler={setShowAlertModalHandler}
+          errMsg={alertErrMsg}
+          key={uuidv4()}
+        />,
         <OrderDetailsModal
           showModal={showModal}
           showModalHandler={showModalHandler}
           order={currentOrder}
           editMode={mode}
           callback={fetchOrders}
+          key={uuidv4()}
         />,
         loadOrdersContent(),
       ]}

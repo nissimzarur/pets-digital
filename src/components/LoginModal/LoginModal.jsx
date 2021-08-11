@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Modal, Button, InputGroup, FormControl } from "react-bootstrap";
 import Loading from "../../components/Loading/Loading";
+import AlertModal from "../../components/AlertModal/AlertModal";
 
 import "./LoginModal.css";
 
@@ -8,13 +9,19 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
   const username = useRef(null);
   const password = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertErrMsg, setAlertErrMsg] = useState("");
+
+  const setShowAlertModalHandler = () => {
+    setShowAlertModal(!showAlertModal);
+  };
 
   const loginButtonHandler = () => {
     setIsLoading(true);
     let adminUsername = username.current.value;
     let adminPassword = password.current.value;
 
-    fetch("http://192.168.56.1:3002/users", {
+    fetch(`${process.env.REACT_APP_IP_ADDRESS}/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -30,7 +37,10 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
           if (result.isAdmin) {
             history.push("/orders");
           } //push to orders.
-          else alert("אין גישה!");
+          else {
+            setAlertErrMsg("הגישה נדחתה");
+            setShowAlertModal(!showAlertModal);
+          }
         }
       })
       .catch((e) => {
@@ -39,37 +49,44 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
       });
   };
   return (
-    <Modal show={showModal} onHide={showModalHandler}>
-      <Modal.Header className="modal-title">
-        <Modal.Title>כניסת מנהל</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <InputGroup className="mb-3">
-          <FormControl
-            aria-label="password"
-            placeholder="סיסמה"
-            ref={password}
-            className="modal-input"
-            type="password"
-          />
-          <FormControl
-            aria-label="email"
-            placeholder='הכנס כתובת דוא"ל'
-            ref={username}
-            className="modal-input"
-            type="email"
-          />
-        </InputGroup>
-      </Modal.Body>
-      <Modal.Footer className="modal-buttons">
-        <Button variant="secondary" onClick={showModalHandler}>
-          סגור
-        </Button>
-        <Button variant="primary" onClick={loginButtonHandler}>
-          כניסה
-        </Button>
-      </Modal.Footer>
-      <div className="loading-container">{isLoading && <Loading />}</div>
-    </Modal>
+    <>
+      <AlertModal
+        showAlertModal={showAlertModal}
+        setShowAlertModalHandler={setShowAlertModalHandler}
+        errMsg={alertErrMsg}
+      />
+      <Modal show={showModal} onHide={showModalHandler}>
+        <Modal.Header className="modal-title">
+          <Modal.Title>כניסת מנהל</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <InputGroup className="mb-3">
+            <FormControl
+              aria-label="password"
+              placeholder="סיסמה"
+              ref={password}
+              className="modal-input"
+              type="password"
+            />
+            <FormControl
+              aria-label="email"
+              placeholder='הכנס כתובת דוא"ל'
+              ref={username}
+              className="modal-input"
+              type="email"
+            />
+          </InputGroup>
+        </Modal.Body>
+        <Modal.Footer className="modal-buttons">
+          <Button variant="secondary" onClick={showModalHandler}>
+            סגור
+          </Button>
+          <Button variant="primary" onClick={loginButtonHandler}>
+            כניסה
+          </Button>
+        </Modal.Footer>
+        <div className="loading-container">{isLoading && <Loading />}</div>
+      </Modal>
+    </>
   );
 }

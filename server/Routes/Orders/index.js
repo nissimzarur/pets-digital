@@ -24,7 +24,6 @@ Orders.post("/", function (req, res) {
   orderModal.collection.insertOne(orderProp, (err, orderRes) => {
     if (err) return res.send({ success: false, errMsg: "שגיאה בקליטת ההזמנה" });
 
-    console.log(orderRes);
     let orderId = orderRes.insertedId;
     let products = [];
 

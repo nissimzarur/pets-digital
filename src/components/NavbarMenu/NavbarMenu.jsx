@@ -13,12 +13,10 @@ function NavbarMenu({ order, user }) {
   const [showModal, setShowModal] = useState(false);
 
   const showModalHandler = () => {
-    console.log(user);
     if (!user.is_admin) return setShowModal(!showModal);
     history.push("/orders");
   };
 
-  console.log({ user: user });
   let numOfProducts = 0;
   if (order) {
     numOfProducts = order.length;

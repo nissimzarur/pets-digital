@@ -1,15 +1,7 @@
 import React, { useRef, useState } from "react";
-import {
-  Modal,
-  Button,
-  InputGroup,
-  FormControl,
-  DropdownButton,
-  Dropdown,
-  Form,
-} from "react-bootstrap";
+import { Modal, Button, FormControl, Form } from "react-bootstrap";
 import Loading from "../../components/Loading/Loading";
-
+import AlertModal from "../../components/AlertModal/AlertModal";
 import "./OrderDetailsModal.css";
 
 export default function OrderDetailsModal({
@@ -20,6 +12,8 @@ export default function OrderDetailsModal({
   callback,
 }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertErrMsg, setAlertErrMsg] = useState("");
 
   const clientName = useRef(null);
   const phone = useRef(null);
@@ -40,7 +34,10 @@ export default function OrderDetailsModal({
     3: "משלוח Express",
   };
 
-  console.log(order);
+  const setShowAlertModalHandler = () => {
+    setShowAlertModal(!showAlertModal);
+  };
+
   const updateClickHandler = () => {
     setIsLoading(true);
     let orderUpdate = {
@@ -55,7 +52,7 @@ export default function OrderDetailsModal({
         : 0,
     };
 
-    fetch("http://192.168.56.1:3002/orders", {
+    fetch(`${process.env.REACT_APP_IP_ADDRESS}/orders`, {
       method: "PUT",
       body: JSON.stringify(orderUpdate),
       headers: { "Content-Type": "application/json" },
@@ -66,7 +63,12 @@ export default function OrderDetailsModal({
           setIsLoading(false);
           showModalHandler();
           callback();
-        } else alert("חלה שגיאה בעת נסיון עדכון ההזמנה");
+        } else {
+          setIsLoading(false);
+          showModalHandler();
+          setAlertErrMsg("חלה שגיאה בעת נסיון עדכון ההזמנה");
+          setShowAlertModal(!showAlertModal);
+        }
       })
       .catch((e) => {});
     return;
@@ -74,6 +76,11 @@ export default function OrderDetailsModal({
 
   return (
     <>
+      <AlertModal
+        showAlertModal={showAlertModal}
+        setShowAlertModalHandler={setShowAlertModalHandler}
+        errMsg={alertErrMsg}
+      />
       <Modal show={showModal} onHide={showModalHandler}>
         <Modal.Header className="modal-title">
           <Modal.Title>{editMode ? "עדכון הזמנה" : "פרטי ההזמנה"}</Modal.Title>

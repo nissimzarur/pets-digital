@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import "./Cart.css";
 import PreOrderModal from "../../components/PreOrderModal/PreOrderModal";
 import AlertModal from "../../components/AlertModal/AlertModal";
+import { v4 as uuidv4 } from "uuid";
 
 function Cart({ order, user }) {
   const [showModal, setShowModal] = useState(false);
@@ -18,7 +19,6 @@ function Cart({ order, user }) {
   };
 
   const setShowAlertModalHandler = () => {
-    console.log(showAlertModal);
     setShowAlertModal(!showAlertModal);
   };
 
@@ -51,7 +51,7 @@ function Cart({ order, user }) {
       );
 
       let content = (
-        <tr>
+        <tr key={uuidv4()}>
           <td>{productsPrice} ₪</td>
           <td>{sameProduct.length}</td>
           <td>{product.title}</td>
@@ -62,7 +62,7 @@ function Cart({ order, user }) {
     });
 
     let totalPriceRow = (
-      <tr className="total-price-row">
+      <tr className="total-price-row" key={uuidv4()}>
         <td>{calcOrderPrice() + " ₪"}</td>
         <td>סה"כ</td>
         <td></td>
@@ -72,49 +72,53 @@ function Cart({ order, user }) {
     rowsContent.push(totalPriceRow);
     return rowsContent;
   };
-  return (
-    <>
-      <div className="cart-table">
-        {order.length > 0 ? (
-          [
-            <AlertModal
-              showAlertModal={showAlertModal}
-              setShowAlertModalHandler={setShowAlertModalHandler}
-              errMsg={alertErrMsg}
-            />,
-            <PreOrderModal
-              showModal={showModal}
-              showModalHandler={showModalHandler}
-              orderPrice={calcOrderPrice()}
-            />,
-            <div className="cart-title">סיכום סל הקניות</div>,
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>מחיר</th>
-                  <th>כמות</th>
-                  <th>שם המוצר</th>
-                  <th>#</th>
-                </tr>
-              </thead>
-              <tbody>{loadProducts()}</tbody>
-            </Table>,
-            <div className="order-btn-container">
-              <Button
-                variant="success"
-                className="cart-order-btn"
-                onClick={showModalHandler}
-              >
-                בצע הזמנה
-              </Button>
-            </div>,
-          ]
-        ) : (
-          <div className="no-products-title">לא קיימים מוצרים בסל הקניות.</div>
-        )}
-      </div>
-    </>
-  );
+
+  const loadPageContent = () => {
+    var content = [
+      <AlertModal
+        showAlertModal={showAlertModal}
+        setShowAlertModalHandler={setShowAlertModalHandler}
+        errMsg={alertErrMsg}
+        key={uuidv4()}
+      />,
+      <PreOrderModal
+        showModal={showModal}
+        showModalHandler={showModalHandler}
+        orderPrice={calcOrderPrice()}
+        key={uuidv4()}
+      />,
+      <div className="cart-title" key={uuidv4()}>
+        סיכום סל הקניות
+      </div>,
+      <Table striped bordered hover key={uuidv4()}>
+        <thead>
+          <tr>
+            <th>מחיר</th>
+            <th>כמות</th>
+            <th>שם המוצר</th>
+            <th>#</th>
+          </tr>
+        </thead>
+        <tbody>{loadProducts()}</tbody>
+      </Table>,
+      <div className="order-btn-container" key={uuidv4()}>
+        <Button
+          variant="success"
+          className="cart-order-btn"
+          onClick={showModalHandler}
+        >
+          בצע הזמנה
+        </Button>
+      </div>,
+    ];
+
+    if (order.length > 0) return content;
+    else
+      return (
+        <div className="no-products-title">לא קיימים מוצרים בסל הקניות.</div>
+      );
+  };
+  return <div className="cart-table">{loadPageContent()}</div>;
 }
 
 const mapStateToProps = (state) => {

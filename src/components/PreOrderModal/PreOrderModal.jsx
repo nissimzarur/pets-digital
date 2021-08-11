@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import Loading from "../../components/Loading/Loading";
+
 import { clearAllProductsFromOrder } from "./../../redux/Order/actions";
 
 import { Modal, Button, Form } from "react-bootstrap";
@@ -35,7 +36,7 @@ function PreOrderModal({
     order.comments = comments.current.value;
     order.shipmentType = shippmentType.current.value;
 
-    fetch("http://192.168.56.1:3002/orders", {
+    fetch(`${process.env.REACT_APP_IP_ADDRESS}/orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(order),
