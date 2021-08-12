@@ -63,7 +63,7 @@ function Products({ addProductToOrder, removeProductFromOrder }) {
     /** END POINT - ONLY FOR TESTING */
 
     // fetch(`${process.env.REACT_APP_IP_ADDRESS}/products`)
-    fetch("./products")
+    fetch("/products")
       .then((results) => results.json())
       .then((products) => {
         products.data.forEach((product, key) => {
