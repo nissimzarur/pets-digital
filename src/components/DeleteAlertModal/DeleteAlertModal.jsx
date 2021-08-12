@@ -13,7 +13,7 @@ export default function DeleteAlertModal({
   return (
     <Modal show={showModal} onHide={showModalHandler}>
       <Modal.Header className="delete-modal-title">
-        <Modal.Title style={{ direction: "rtl" }}>
+        <Modal.Title style={{ direction: "rtl", textAlign: "center" }}>
           אתה בטוח שברצונך למחוק את ההזמנה?
         </Modal.Title>
         <Modal.Footer className="modal-buttons">
