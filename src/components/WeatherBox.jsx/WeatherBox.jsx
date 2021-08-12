@@ -94,7 +94,7 @@ export default function WeatherBox() {
         <Card.Body className="weather-center-text">
           <Card.Title>מזג אוויר</Card.Title>
           <Card.Text style={{ direction: "rtl" }}>
-            מתכננים טיול או חופשה עם חיית מחמד שלכם? בדוקו האם מזג האוויר מתאים
+            מתכננים טיול או חופשה עם חיית המחמד שלכם? בדקו האם מזג האוויר מתאים
             להם...
           </Card.Text>
           <InputGroup className="mb-3" style={{ direction: "rtl" }}>

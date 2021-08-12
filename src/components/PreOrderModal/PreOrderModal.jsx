@@ -45,7 +45,7 @@ function PreOrderModal({
       }
     }
 
-    if (valueMissing) return setMissingValueMsg("אנא מלא את כל השדות חובה");
+    if (valueMissing) return setMissingValueMsg("אנא מלא את כל שדות החובה");
     else setMissingValueMsg("");
 
     setIsLoading(true);
