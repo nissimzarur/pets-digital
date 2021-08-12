@@ -90,16 +90,30 @@ Orders.delete("/", function (req, res) {
 
   const orderId = ObjectId(orderObj._id);
   const orderModal = new OrderModel();
+  const orderProductsModel = new OrderProductsModel();
 
   orderModal.collection
     .deleteOne({ _id: orderId })
     .then((result) => {
-      if (result.deletedCount > 0) return res.json({ success: true });
-      else
+      if (result.deletedCount == 0) {
         return res.json({
           success: false,
           errMsg: "חלה שגיאה בעת נסיון מחיקת ההזמנה",
         });
+      }
+      orderProductsModel.collection
+        .deleteMany({ order_id: orderId })
+        .then((result) => {
+          if (result.deletedCount == 0) {
+            return res.json({
+              success: false,
+              errMsg: "חלה שגיאה בעת נסיון מחיקת ההזמנה",
+            });
+          }
+
+          return res.send({ success: true });
+        })
+        .catch((e) => console.log(e));
     })
     .catch((e) => console.log(e));
 });

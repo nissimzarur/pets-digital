@@ -1,23 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Button, Table, Image } from "react-bootstrap";
 import "./Orders.css";
 
 import OrderDetailsModal from "./../../components/OrderDetailsModal/OrderDetailsModal";
 import AlertModal from "../../components/AlertModal/AlertModal";
 import { v4 as uuidv4 } from "uuid";
+import DeleteAlertModal from "../../components/DeleteAlertModal/DeleteAlertModal";
 
-export default function Orders({history}) {
+export default function Orders({ history }) {
   const [ordersContent, setOrderContent] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentOrder, setCurrentOrder] = useState({});
   const [mode, setMode] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [alertErrMsg, setAlertErrMsg] = useState("");
+  const [orderForDelete, setOrderForDelete] = useState({});
 
-  if(!history.location.state || !history.location.state.isAdmin) history.push('/');
+  if (!history.location.state || !history.location.state.isAdmin)
+    history.push("/");
 
   const setShowAlertModalHandler = () => {
     setShowAlertModal(!showAlertModal);
+  };
+
+  const setShowDeleteAlertHandler = (order) => {
+    setOrderForDelete(order);
+    setShowDeleteAlert(!showDeleteAlert);
   };
 
   const showModalHandler = () => {
@@ -50,8 +59,12 @@ export default function Orders({history}) {
           setAlertErrMsg("חלה שגיאה בעת נסיון מחיקת ההזמנה");
           setShowAlertModal(!showAlertModal);
         }
+        setShowDeleteAlert(false);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        setShowDeleteAlert(false);
+        console.log(e);
+      });
   };
 
   const fetchOrders = () => {
@@ -65,7 +78,12 @@ export default function Orders({history}) {
             ordersResp.orders.forEach((order) => {
               rowNum++;
               content.push(
-                <tr key={uuidv4()}>
+                <tr
+                  key={uuidv4()}
+                  style={{
+                    backgroundColor: order.status === 3 ? "#F6ACAC" : "",
+                  }}
+                >
                   <td>
                     <div
                       style={{
@@ -84,9 +102,7 @@ export default function Orders({history}) {
                       </Button>
                       <Button
                         variant="danger"
-                        onClick={() => {
-                          deleteOrder(order);
-                        }}
+                        onClick={() => setShowDeleteAlertHandler(order)}
                         className="order-btn"
                       >
                         <Image src="./assets/images/delete.png" />
@@ -98,7 +114,9 @@ export default function Orders({history}) {
                     style={{ cursor: "pointer" }}
                     onClick={() => handleRowClick(order, false)}
                   >
-                    {order._id.substr(order._id.length - 8)}
+                    <span className="order-number">
+                      {order._id.substr(order._id.length - 8)}
+                    </span>
                   </td>
                   <td>{rowNum}</td>
                 </tr>
@@ -142,6 +160,13 @@ export default function Orders({history}) {
   return (
     <>
       {[
+        <DeleteAlertModal
+          showModal={showDeleteAlert}
+          showModalHandler={setShowDeleteAlertHandler}
+          deleteOrderHandler={deleteOrder}
+          order={orderForDelete}
+          key={uuidv4()}
+        />,
         <AlertModal
           showAlertModal={showAlertModal}
           setShowAlertModalHandler={setShowAlertModalHandler}

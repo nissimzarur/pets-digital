@@ -3,24 +3,13 @@ import { Button, Table } from "react-bootstrap";
 import { connect } from "react-redux";
 import "./Cart.css";
 import PreOrderModal from "../../components/PreOrderModal/PreOrderModal";
-import AlertModal from "../../components/AlertModal/AlertModal";
 import { v4 as uuidv4 } from "uuid";
 
-function Cart({ order, user }) {
+function Cart({ order }) {
   const [showModal, setShowModal] = useState(false);
-  const [showAlertModal, setShowAlertModal] = useState(false);
-  const [alertErrMsg, setAlertErrMsg] = useState("");
 
   const showModalHandler = () => {
-	setShowModal(!showModal);
-    // if (Object.keys(user).length === 0) {
-    //   setAlertErrMsg("אנא התחבר בכדי להמשיך לביצוע ההזמנה");
-    //   setShowAlertModalHandler();
-    // } else setShowModal(!showModal);
-  };
-
-  const setShowAlertModalHandler = () => {
-    setShowAlertModal(!showAlertModal);
+    setShowModal(!showModal);
   };
 
   const calcOrderPrice = () => {
@@ -76,12 +65,6 @@ function Cart({ order, user }) {
 
   const loadPageContent = () => {
     var content = [
-      <AlertModal
-        showAlertModal={showAlertModal}
-        setShowAlertModalHandler={setShowAlertModalHandler}
-        errMsg={alertErrMsg}
-        key={uuidv4()}
-      />,
       <PreOrderModal
         showModal={showModal}
         showModalHandler={showModalHandler}
@@ -124,10 +107,9 @@ function Cart({ order, user }) {
 
 const mapStateToProps = (state) => {
   const { orderReducer } = state.OrderReducer;
-  const { user } = state.UserReducer;
   const order = orderReducer;
 
-  return { order, user };
+  return { order };
 };
 
 export default connect(mapStateToProps)(Cart);

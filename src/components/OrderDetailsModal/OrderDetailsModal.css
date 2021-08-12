@@ -18,3 +18,10 @@
   display: flex;
   justify-content: center;
 }
+
+.form-select {
+  direction: rtl;
+  text-align: center;
+  width: 300px;
+  margin-bottom: 10px;
+}

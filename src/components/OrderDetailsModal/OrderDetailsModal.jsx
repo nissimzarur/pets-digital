@@ -21,6 +21,7 @@ export default function OrderDetailsModal({
   const orderStatus = useRef(null);
   const price = useRef(null);
   const shipmentType = useRef(null);
+  const comments = useRef(null);
 
   const orderStatusTable = {
     1: "טרם נשלח",
@@ -47,6 +48,7 @@ export default function OrderDetailsModal({
       shipment_address: shipmentAddress.current.value,
       status: !isNaN(orderStatus.current.value) ? orderStatus.current.value : 0,
       price: price.current.value,
+      comments: comments.current.value,
       shipment_type: !isNaN(shipmentType.current.value)
         ? shipmentType.current.value
         : 0,
@@ -118,9 +120,17 @@ export default function OrderDetailsModal({
             type="number"
             disabled={!editMode}
           />
+          <FormControl
+            className="order-input"
+            aria-label="comments"
+            placeholder={order.comments}
+            ref={comments}
+            type="text"
+            disabled={!editMode}
+          />
           <Form.Select
             aria-label="Default select example"
-            className="modal-input"
+            className="form-select"
             ref={orderStatus}
             disabled={!editMode}
           >
@@ -141,7 +151,7 @@ export default function OrderDetailsModal({
           </Form.Select>
           <Form.Select
             aria-label="Default select example"
-            className="modal-input"
+            className="form-select"
             ref={shipmentType}
             disabled={!editMode}
           >
@@ -162,14 +172,14 @@ export default function OrderDetailsModal({
           </Form.Select>
         </Modal.Body>
         <Modal.Footer className="modal-buttons">
-          <Button variant="secondary" onClick={showModalHandler}>
-            סגור
-          </Button>
           {editMode && (
             <Button variant="success" onClick={updateClickHandler}>
               עדכן
             </Button>
           )}
+          <Button variant="secondary" onClick={showModalHandler}>
+            סגור
+          </Button>
         </Modal.Footer>
         <div className="loading-container">{isLoading && <Loading />}</div>
       </Modal>

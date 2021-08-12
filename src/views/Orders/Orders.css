@@ -2,3 +2,12 @@
   margin: 2px;
   width: 50px;
 }
+
+.order-number {
+  color: blue;
+  text-decoration: underline;
+}
+
+.order-number:hover {
+  color: rgb(117, 205, 235);
+}

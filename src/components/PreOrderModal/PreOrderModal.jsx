@@ -18,7 +18,7 @@ function PreOrderModal({
   user,
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [missingValueMsg, setMissingValueMsg] = useState('');
+  const [missingValueMsg, setMissingValueMsg] = useState("");
   const clientName = useRef(null);
   const shipmentAddress = useRef(null);
   const phone = useRef(null);
@@ -26,9 +26,8 @@ function PreOrderModal({
   const shippmentType = useRef(null);
 
   const orderButtonHandler = () => {
-
     let order = {};
-	let valueMissing = false;
+    let valueMissing = false;
     order.clientName = clientName.current.value;
     order.products = orderProducts;
     order.price = orderPrice;
@@ -37,20 +36,19 @@ function PreOrderModal({
     order.comments = comments.current.value;
     order.shipmentType = shippmentType.current.value;
 
-	
-	for (const key in order) {
-		if(['clientName', 'shipmentAddress', 'shipmentType'].includes(key)){
-			const fieldValue = order[key];
-			console.log(fieldValue);
-			console.log(isNaN(fieldValue));
-			if(!fieldValue || (key === "shipmentType" && isNaN(fieldValue))) valueMissing = true;
-		}	
-	}
+    for (const key in order) {
+      if (["clientName", "shipmentAddress", "shipmentType"].includes(key)) {
+        const fieldValue = order[key];
 
-	if(valueMissing) return setMissingValueMsg('אנא מלא את כל השדות חובה');
-	else setMissingValueMsg('');
+        if (!fieldValue || (key === "shipmentType" && isNaN(fieldValue)))
+          valueMissing = true;
+      }
+    }
 
-	setIsLoading(true);
+    if (valueMissing) return setMissingValueMsg("אנא מלא את כל השדות חובה");
+    else setMissingValueMsg("");
+
+    setIsLoading(true);
 
     fetch(`${process.env.REACT_APP_IP_ADDRESS}/orders`, {
       method: "POST",
@@ -99,6 +97,9 @@ function PreOrderModal({
             placeholder="פלאפון"
             className="modal-input"
             ref={phone}
+            onKeyPress={(e) => {
+              if (!(e.charCode >= 48 && e.charCode <= 57)) e.preventDefault();
+            }}
           />
           <Form.Control
             type="text"
@@ -110,9 +111,9 @@ function PreOrderModal({
             aria-label="Default select example"
             className="modal-input"
             ref={shippmentType}
-			style={{direction:"rtl"}}
+            style={{ textAlign: "center" }}
           >
-            <option >*סוג משלוח</option>
+            <option style={{ direction: "rtl" }}>*סוג משלוח</option>
             <option value="1" style={{ direction: "rtl" }}>
               משלוח רגיל
             </option>
@@ -124,14 +125,16 @@ function PreOrderModal({
             </option>
           </Form.Select>
         </Form>
-        {missingValueMsg!=='' && <Modal.Body className="err-msg">{missingValueMsg}</Modal.Body>}
+        {missingValueMsg !== "" && (
+          <Modal.Body className="err-msg">{missingValueMsg}</Modal.Body>
+        )}
         <Modal.Body className="body-container">אשר ביצוע הזמנה</Modal.Body>
         <Modal.Footer className="modal-buttons">
-          <Button variant="secondary" onClick={showModalHandler}>
-            סגור
-          </Button>
           <Button variant="success" onClick={orderButtonHandler}>
             הזמן
+          </Button>
+          <Button variant="secondary" onClick={showModalHandler}>
+            סגור
           </Button>
         </Modal.Footer>
         <div className="loading-container">{isLoading && <Loading />}</div>

@@ -20,14 +20,18 @@
 }
 
 .modal-input {
-  /* direction: rtl; */
+  direction: rtl;
   text-align: right;
   width: 300px;
   margin-bottom: 2px;
 }
 
-.err-msg{
-	font-weight: bold;
-	color:red;
-	text-align: center;
+.err-msg {
+  font-weight: bold;
+  color: red;
+  text-align: center;
+}
+
+.modal-buttons {
+  direction: rtl;
 }

@@ -24,7 +24,7 @@ export default function Homepage(props) {
         <WeatherBox />
       </div>
       <img
-        src="/assets/images/header.jpg"
+        src="./assets/images/header.jpg"
         style={{ backgroundSize: "cover", width: "100%" }}
         alt="homepage-img"
       />

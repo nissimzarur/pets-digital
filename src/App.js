@@ -12,7 +12,6 @@ import OrderReducer from "./redux/Order/reducer";
 import UserReducer from "./redux/User/reducer";
 import Cart from "./views/Cart/Cart";
 import Orders from "./views/Orders/Orders";
-import Login from "./views/Login/Login";
 
 const rootReducer = combineReducers({
   OrderReducer,
@@ -27,7 +26,6 @@ function App() {
       <Router>
         <NavbarMenu />
         <Switch>
-          {/* <Route path="/login" component={Login} /> */}
           <Route path="/homepage" component={Homepage} />
           <Route path="/orders" component={Orders} />
           <Route path="/cart" component={Cart} />
