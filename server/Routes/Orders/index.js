@@ -50,7 +50,7 @@ Orders.post("/", function (req, res) {
 });
 
 Orders.get("/", function (req, res) {
-  OrderModel.find({ isDeleted: 0 })
+  OrderModel.find()
     .then((orders) => {
       if (!orders) return res.json({ success: true, orders: [] });
       return res.json({ success: true, orders: orders });
@@ -90,12 +90,11 @@ Orders.delete("/", function (req, res) {
 
   const orderId = ObjectId(orderObj._id);
   const orderModal = new OrderModel();
-  updateProps = { isDeleted: 1 };
 
   orderModal.collection
-    .updateOne({ _id: orderId }, { $set: updateProps })
+    .deleteOne({ _id: orderId })
     .then((result) => {
-      if (result.modifiedCount > 0) return res.json({ success: true });
+      if (result.deletedCount > 0) return res.json({ success: true });
       else
         return res.json({
           success: false,
