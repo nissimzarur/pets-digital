@@ -8,6 +8,7 @@ Users.post("/", function (req, res) {
   let userProp = {
     username: user.username,
     password: user.password,
+    is_admin: true,
   };
 
   UsersModel.find(userProp, (err, usersResp) => {

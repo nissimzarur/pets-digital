@@ -17,9 +17,17 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
   };
 
   const loginButtonHandler = () => {
-    setIsLoading(true);
     let adminUsername = username.current.value;
     let adminPassword = password.current.value;
+
+    if (!adminUsername || !adminPassword) {
+      showModalHandler();
+      setAlertErrMsg("אנא מלא שם משתמש וסיסמא תקינים.");
+      setShowAlertModal(!showAlertModal);
+      return false;
+    }
+
+    setIsLoading(true);
 
     fetch(`${process.env.REACT_APP_IP_ADDRESS}/users`, {
       method: "POST",
@@ -35,7 +43,7 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
         showModalHandler();
         if (result.success) {
           if (result.isAdmin) {
-            history.push("/orders",{isAdmin:true});
+            history.push("/orders", { isAdmin: true });
           } //push to orders.
           else {
             setAlertErrMsg("הגישה נדחתה");
@@ -55,13 +63,16 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
         setShowAlertModalHandler={setShowAlertModalHandler}
         errMsg={alertErrMsg}
       />
-      <Modal show={showModal} onHide={showModalHandler} className="login-modal-container">
+      <Modal
+        show={showModal}
+        onHide={showModalHandler}
+        className="login-modal-container"
+      >
         <Modal.Header className="modal-title">
           <Modal.Title>כניסת מנהל</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <InputGroup className="mb-3">
-        
             <FormControl
               aria-label="email"
               placeholder='הכנס כתובת דוא"ל'
@@ -69,7 +80,7 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
               className="modal-input"
               type="email"
             />
-			    <FormControl
+            <FormControl
               aria-label="password"
               placeholder="סיסמה"
               ref={password}
@@ -79,7 +90,7 @@ export default function LoginModal({ showModal, showModalHandler, history }) {
           </InputGroup>
         </Modal.Body>
         <Modal.Footer className="modal-buttons">
-		<Button variant="primary" onClick={loginButtonHandler}>
+          <Button variant="primary" onClick={loginButtonHandler}>
             כניסה
           </Button>
           <Button variant="secondary" onClick={showModalHandler}>

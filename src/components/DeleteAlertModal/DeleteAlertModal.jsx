@@ -8,8 +8,6 @@ export default function DeleteAlertModal({
   deleteOrderHandler,
   order,
 }) {
-  console.log("asdasdsd");
-
   return (
     <Modal show={showModal} onHide={showModalHandler}>
       <Modal.Header className="delete-modal-title">
